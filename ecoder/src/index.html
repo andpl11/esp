@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>temperatura</title>
+ 
+    <style>
+        body{
+              background-color: black;
+              color: white;
+          }
+          .main{
+              border: 1px solid white;
+              width: 300px;
+              height: 150px;
+              border-radius: 20px;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%,-50%);
+              text-align: center;
+          }
+          .main p{
+              text-align: center;
+          }
+  </style>
+</head>
+
+<body>
+
+    <div class="main">
+        <p class="p1"></p>
+        <p class="p2"></p>
+        <input type="number" placeholder="set temp" class="inc" oninput="set()">
+    </div>
+
+    <script>
+
+const p1 = document.querySelector('.p1');
+const p2 = document.querySelector('.p2');
+const button = document.querySelector(".inc");
+
+setInterval(function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/update");
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    let str = this.responseText.split(";");
+                    console.log(str);
+                    p1.innerHTML = "Sensor 1"+str[0]+"degC";
+                    p2.innerHTML = "Sensor 2"+str[1]+"degC";
+                }
+            };
+        }, 500);
+
+
+        const set = ()=>{
+            console.log(button.value);
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET","/state?value=" + button.value, true);
+            xhr.send();
+        }
+    
+    </script>
+    
+
+</body>
+</html>
+  
